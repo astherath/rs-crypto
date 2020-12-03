@@ -33,5 +33,11 @@ impl Block {
     }
 }
 
-#[derive(Clone)]
+#[derive(Copy, Clone)]
 pub struct BlockChainData {}
+
+impl BlockChainData {
+    pub fn new() -> Self {
+        Self {}
+    }
+}

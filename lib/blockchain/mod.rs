@@ -4,7 +4,7 @@
 use append_only_linked_list::List;
 use std::fmt;
 mod block;
-use block::Block;
+pub use block::{Block, BlockChainData};
 
 pub struct Blockchain {
     block_list: List,
@@ -16,7 +16,7 @@ impl Blockchain {
         Self { block_list }
     }
 
-    pub fn append_block(mut self, block: Block) {
+    pub fn append_block(self, block: Block) {
         self.block_list.append_block(block);
     }
 }
