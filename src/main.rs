@@ -2,5 +2,6 @@ mod blockchain;
 use blockchain::Blockchain;
 
 fn main() {
-    let _chain = Blockchain::new();
+    let chain = Blockchain::new();
+    println!("BlockChain display: {}", chain);
 }
