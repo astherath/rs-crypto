@@ -4,6 +4,7 @@
 use append_only_linked_list::List;
 use std::fmt;
 mod block;
+use block::Block;
 
 pub struct Blockchain {
     block_list: List,
@@ -13,6 +14,10 @@ impl Blockchain {
     pub fn new() -> Self {
         let block_list = List::new();
         Self { block_list }
+    }
+
+    pub fn append_block(mut self, block: Block) {
+        self.block_list.append_block(block);
     }
 }
 
@@ -53,17 +58,17 @@ mod append_only_linked_list {
             }
         }
 
-        pub fn append_node(mut self, block: Block) {
+        pub fn append_block(mut self, block: Block) {
             if self.is_empty() {
                 self.data = Some(block);
             } else {
-                let mut last_node = self.get_last_node();
+                let mut last_node = self.get_last_block();
                 let new_node = Self::from_block(&block);
                 last_node.next = Some(Box::new(new_node));
             }
         }
 
-        fn get_last_node(self) -> Self {
+        fn get_last_block(self) -> Self {
             let mut current = self.next;
             loop {
                 match current {

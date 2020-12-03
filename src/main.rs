@@ -1,5 +1,5 @@
-mod blockchain;
-use blockchain::Blockchain;
+extern crate lib;
+use lib::blockchain::Blockchain;
 
 fn main() {
     let chain = Blockchain::new();

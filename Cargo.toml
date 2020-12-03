@@ -13,3 +13,7 @@ rust-crypto = "0.2.36"
 [dependencies.uuid]
 version = "0.8"
 features = ["serde", "v4"]
+
+[lib]
+name = "lib"
+path = "lib/lib.rs"
