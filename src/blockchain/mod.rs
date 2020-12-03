@@ -29,7 +29,6 @@ impl fmt::Display for Blockchain {
 /// module in the future if it grows to be unmanageable but this works better for now.
 mod append_only_linked_list {
     use super::block::Block;
-    use std::rc::Rc;
 
     pub struct List {
         data: Option<Block>,
@@ -64,7 +63,7 @@ mod append_only_linked_list {
             }
         }
 
-        fn get_last_node(mut self) -> Self {
+        fn get_last_node(self) -> Self {
             let mut current = self.next;
             loop {
                 match current {
