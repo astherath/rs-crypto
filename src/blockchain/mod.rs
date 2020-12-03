@@ -28,11 +28,54 @@ impl fmt::Display for Blockchain {
 /// this, the list, and the block modules. This would make it very easy to extract to another
 /// module in the future if it grows to be unmanageable but this works better for now.
 mod AppendOnlySinglyLinkedList {
-    pub struct List {}
+    use super::block::Block;
+
+    pub struct List {
+        data: Option<Block>,
+        next: Option<&'static Self>,
+    }
 
     impl List {
+        /// Instanciates an **empty** linked list.
+        /// Blocks are the only data this structure interacts with.
         pub fn new() -> Self {
-            Self {}
+            Self {
+                data: None,
+                next: None,
+            }
+        }
+
+        /// Private function to create an instance based on a block
+        fn from_block(block: Block) -> Self {
+            Self {
+                data: Some(block),
+                next: None,
+            }
+        }
+
+        pub fn append_node(&mut self, block: Block) {
+            if self.is_empty() {
+                self.data = Some(block);
+            } else {
+                // find the last node and append to it
+                let mut last_node = self.get_last_node();
+                static mut new_node: List = List::from_block(block.clone());
+                last_node.next = Some(&new_node);
+            }
+        }
+
+        fn get_last_node(&self) -> &Self {
+            let mut head = self;
+            while head.next.is_some() {
+                head = head.next.unwrap();
+            }
+            head
+        }
+
+        /// This isn't a _super_ necessary method but it makes it a little easier to
+        /// refactor in the future if we change to node based list (or something else).
+        fn is_empty(&self) -> bool {
+            self.data.is_none()
         }
     }
 }

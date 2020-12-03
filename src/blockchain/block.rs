@@ -2,6 +2,7 @@ use chrono::prelude::Utc;
 use crypto::{digest::Digest, sha2::Sha256};
 use uuid::Uuid;
 
+#[derive(Clone)]
 pub struct Block {
     hash_address: String,
     data: BlockChainData,
@@ -32,4 +33,5 @@ impl Block {
     }
 }
 
+#[derive(Clone)]
 pub struct BlockChainData {}
