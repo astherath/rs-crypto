@@ -37,6 +37,7 @@ impl Block {
 pub struct BlockChainData {}
 
 impl BlockChainData {
+    #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         Self {}
     }

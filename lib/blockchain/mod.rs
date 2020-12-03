@@ -37,6 +37,14 @@ impl fmt::Display for Blockchain {
     }
 }
 
+// Delegates `new()` call since we're not taking in any arguments.
+impl Default for Blockchain {
+    fn default() -> Self {
+        let block_list = List::new();
+        Self { block_list }
+    }
+}
+
 /// This inner module _could_ be in a different file, and it even was for a brief moment in
 /// the commit history, but it introduced an unnecessary amount of 3-way coupling between
 /// this, the list, and the block modules. This would make it very easy to extract to another
