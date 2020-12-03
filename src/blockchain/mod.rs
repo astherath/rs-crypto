@@ -32,7 +32,7 @@ mod AppendOnlySinglyLinkedList {
 
     pub struct List {
         data: Option<Block>,
-        next: Option<&Self>,
+        next: Option<Box<Self>>,
     }
 
     impl List {
@@ -58,18 +58,15 @@ mod AppendOnlySinglyLinkedList {
                 self.data = Some(block);
             } else {
                 // find the last node and append to it
-                let mut last_node = self.get_last_node();
-                let mut new_node = Self::from_block(&block);
-                last_node.next = Some(&new_node);
-            }
-        }
+                let mut head = self;
+                while let Some(next_ptr) = head.next {
+                    head = &(*head.next.unwrap());
+                }
 
-        fn get_last_node(&self) -> &Self {
-            let mut head = self;
-            while head.next.is_some() {
-                head = head.next.unwrap()
+                let mut last_node = head;
+                let new_node = Self::from_block(&block);
+                last_node.next = Some(Box::new(new_node));
             }
-            head
         }
 
         /// This isn't a _super_ necessary method but it makes it a little easier to
