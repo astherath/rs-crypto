@@ -19,6 +19,14 @@ impl Blockchain {
     pub fn append_block(&mut self, block: Block) {
         self.block_list.append_block(block);
     }
+
+    pub fn len(&self) -> usize {
+        self.block_list.get_amount_of_blocks()
+    }
+
+    pub fn get_most_recent_block(&self) -> Option<&Block> {
+        self.block_list.get_most_recent_block()
+    }
 }
 
 impl fmt::Display for Blockchain {
@@ -53,9 +61,12 @@ mod append_only_list {
             self.data_list.push(block);
         }
 
-        fn get_most_recent_block(&self) ->  Option<&Block> {
+        pub fn get_most_recent_block(&self) -> Option<&Block> {
             self.data_list.last()
         }
 
+        pub fn get_amount_of_blocks(&self) -> usize {
+            self.data_list.len()
+        }
     }
 }
