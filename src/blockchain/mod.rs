@@ -29,10 +29,11 @@ impl fmt::Display for Blockchain {
 /// module in the future if it grows to be unmanageable but this works better for now.
 mod AppendOnlySinglyLinkedList {
     use super::block::Block;
+    use std::rc::Rc;
 
     pub struct List {
         data: Option<Block>,
-        next: Option<&'static Self>,
+        next: Option<Rc<Self>>,
     }
 
     impl List {
@@ -46,9 +47,9 @@ mod AppendOnlySinglyLinkedList {
         }
 
         /// Private function to create an instance based on a block
-        fn from_block(block: Block) -> Self {
+        fn from_block(block: &Block) -> Self {
             Self {
-                data: Some(block),
+                data: Some(block.clone()),
                 next: None,
             }
         }
@@ -59,8 +60,8 @@ mod AppendOnlySinglyLinkedList {
             } else {
                 // find the last node and append to it
                 let mut last_node = self.get_last_node();
-                static mut new_node: List = List::from_block(block.clone());
-                last_node.next = Some(&new_node);
+                let mut new_node = Self::from_block(&block);
+                last_node.next = Some(Rc::new(new_node));
             }
         }
 
