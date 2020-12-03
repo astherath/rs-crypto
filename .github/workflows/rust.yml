@@ -24,9 +24,5 @@ jobs:
       run: cargo test --verbose
     - name: Install linter (clippy)
       run: rustup component add clippy
-    - name: Install rusfmt
-      run: rustup component add rustfmt
-    - name: Run formatter
-      run: cargo fmt --all -- --check
     - name: Run clippy
       run: cargo clippy -- -D warnings
