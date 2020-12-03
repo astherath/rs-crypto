@@ -1,8 +1,8 @@
 //! This data structure _could_ be made to include a generic but it doesn't really make
 //! sense to do all of that work without purpose - we're not ever gonna use this with a
 //! non-block piece of data, so it's not worth the extra effort.
+use append_only_linked_list::List;
 use std::fmt;
-use AppendOnlySinglyLinkedList::List;
 mod block;
 
 pub struct Blockchain {
@@ -27,7 +27,7 @@ impl fmt::Display for Blockchain {
 /// the commit history, but it introduced an unnecessary amount of 3-way coupling between
 /// this, the list, and the block modules. This would make it very easy to extract to another
 /// module in the future if it grows to be unmanageable but this works better for now.
-mod AppendOnlySinglyLinkedList {
+mod append_only_linked_list {
     use super::block::Block;
     use std::rc::Rc;
 
@@ -58,18 +58,21 @@ mod AppendOnlySinglyLinkedList {
             if self.is_empty() {
                 self.data = Some(block);
             } else {
-                let mut current = self.next;
-                loop {
-                    match current {
-                        None => break,
-                        Some(_) => current = current.unwrap().next,
-                    }
-                }
-
-                let mut last_node = current.unwrap();
+                let mut last_node = self.get_last_node();
                 let new_node = Self::from_block(&block);
                 last_node.next = Some(Box::new(new_node));
             }
+        }
+
+        fn get_last_node(mut self) -> Self {
+            let mut current = self.next;
+            loop {
+                match current {
+                    None => break,
+                    Some(_) => current = current.unwrap().next,
+                }
+            }
+            *current.unwrap()
         }
 
         /// This isn't a _super_ necessary method but it makes it a little easier to
