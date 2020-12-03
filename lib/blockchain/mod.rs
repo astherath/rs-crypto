@@ -24,6 +24,10 @@ impl Blockchain {
         self.block_list.get_amount_of_blocks()
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     pub fn get_most_recent_block(&self) -> Option<&Block> {
         self.block_list.get_most_recent_block()
     }
