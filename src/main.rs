@@ -1,3 +1,7 @@
+extern crate lib;
+use lib::blockchain::Blockchain;
+
 fn main() {
-    println!("Hello, world!");
+    let chain = Blockchain::new();
+    println!("BlockChain display: {}", chain);
 }
