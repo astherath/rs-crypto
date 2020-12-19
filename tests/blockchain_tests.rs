@@ -1,5 +1,5 @@
 extern crate lib;
-use lib::blockchain::{Block, BlockChainData, Blockchain};
+use lib::blockchain::{Block, Blockchain, Transaction, Output};
 
 #[test]
 fn test_create_block_chain_ok() {
@@ -54,16 +54,40 @@ fn test_get_most_recent_block_empty_list_failure() {
 fn generate_blocks(amount: usize) -> Vec<Block> {
     let mut blocks = Vec::new();
     for _ in 0..amount {
-        let data = BlockChainData::new();
+        let transactions = vec![
+            Transaction{
+                inputs: vec![],
+                outputs: vec![]
+            }
+        ];
         let last_block_hash = "random_hash".to_string();
-        blocks.push(Block::new(data, last_block_hash));
+        blocks.push(Block::new(transactions, last_block_hash));
     }
     blocks
 }
 fn generate_single_block() -> Block {
-    let data = BlockChainData::new();
+    let transactions = vec![
+            Transaction{
+                inputs: vec![
+                    Output{
+                        to_address: "Alice".to_string(),
+                        value: 50
+                    }
+                ],
+                outputs: vec![
+                    Output{
+                        to_address: "Bob".to_string(),
+                        value: 25
+                    },
+                    Output{
+                        to_address: "Alice".to_string(),
+                        value: 25
+                    }
+                ]
+            }
+        ];
     let last_block_hash = "random_hash".to_string();
-    Block::new(data, last_block_hash)
+    Block::new(transactions, last_block_hash)
 }
 
 fn generate_empty_blockchain() -> Blockchain {
