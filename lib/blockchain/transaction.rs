@@ -20,28 +20,23 @@ impl Transaction {
   /// Give each transaction a hash to be later used in merkle tree.
   pub fn transaction_hash(&self) -> String {
     let mut hasher = Sha256::new();
-    let total_sum: u64 = self.input_value() + self.output_value();
-
-    hasher.input(total_sum.to_string().as_bytes());
-    hasher.result_str()
-  }
-
-  /// Hash the vector of output data by summing the bytes.
-  fn generate_hash(&self, to_hash: Vec<u8>) -> String {
-    let mut hasher = Sha256::new();
-    let to_hash_sum: u8 = to_hash.iter().sum();
     
-    hasher.input(to_hash_sum.to_string().as_bytes());
+    self.input_hashes().iter().for_each(|hash| hasher.input(hash.as_bytes()));
+    self.output_hashes().iter().for_each(|hash| hasher.input(hash.as_bytes()));
+
     hasher.result_str()
   }
 
-  /// Turn output data into vector of bytes to later be hashed.
-  fn output_bytes(&self, output: &Output) -> Vec<u8> {
-    let mut bytes = vec![];
-    bytes.extend(output.to_address.as_bytes());
-    bytes.extend(output.value.to_string().as_bytes());
-
-    bytes
+  /// Hash of output data.
+  fn generate_hash(&self, to_hash: &Output) -> String {
+    let mut hasher = Sha256::new();
+    
+    let output_value_string = to_hash.value.to_string();
+    let owned_address = to_hash.to_address.to_owned();
+    let combined_data = owned_address + &output_value_string;
+    
+    hasher.input(combined_data.as_bytes());
+    hasher.result_str()
   }
 
   // Sum of value of each input.
@@ -61,16 +56,14 @@ impl Transaction {
   /// HashSet of hashed inputs.
   pub fn input_hashes(&self) -> HashSet<String>{
     self.inputs.iter().map(|input| {
-      let input_bytes = self.output_bytes(input);
-      self.generate_hash(input_bytes)
+      self.generate_hash(input)
     }).collect::<HashSet<String>>()
   }
 
   /// HashSet of hashed outputs.
   pub fn output_hashes(&self) -> HashSet<String>{
     self.outputs.iter().map(|output| {
-      let output_bytes = self.output_bytes(output);
-      self.generate_hash(output_bytes)
+      self.generate_hash(output)
     }).collect::<HashSet<String>>()
   }
 }
