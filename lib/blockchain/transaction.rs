@@ -52,7 +52,7 @@ impl Transaction {
   }
 
   // Sum of value of input.
-  pub fn get_sum_of_values(&self, input: &Vec<TransactionData>) -> u64 {
+  pub fn get_sum_of_values(&self, input: &[TransactionData]) -> u64 {
     input
         .iter()
         .map(|transaction_data| transaction_data.value)
@@ -64,7 +64,7 @@ impl Transaction {
   /// of unspent transactions (UTXO).
 
   /// HashSet of hashed input.
-  pub fn input_hashes(&self, inputs: &Vec<TransactionData>) -> HashSet<String>{
+  pub fn input_hashes(&self, inputs: &[TransactionData]) -> HashSet<String>{
     inputs.iter().map(|input| {
       self.generate_hash(input)
     }).collect::<HashSet<String>>()
