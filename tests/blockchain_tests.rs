@@ -1,5 +1,5 @@
 extern crate lib;
-use lib::blockchain::{Block, Blockchain, Transaction, Output};
+use lib::blockchain::{Block, Blockchain, Transaction, TransactionData};
 
 #[test]
 fn test_create_block_chain_ok() {
@@ -50,6 +50,46 @@ fn test_get_most_recent_block_empty_list_failure() {
     assert_eq!(None, most_recent_block);
 }
 
+#[test]
+fn test_sum_transaction_inputs() {
+    let transaction = Transaction{
+        inputs: vec![
+            TransactionData{
+                to_address: "Alice".to_string(),
+                value: 25
+            },
+            TransactionData{
+                to_address: "Bob".to_string(),
+                value: 120
+            }
+        ],
+        outputs: vec![]
+    };
+    let transaction_inputs = &transaction.inputs;
+    let input_sum = transaction.get_sum_of_values(transaction_inputs);
+    assert_eq!(input_sum, 145);
+}
+
+#[test]
+fn test_sum_transaction_outputs() {
+    let transaction = Transaction{
+        inputs: vec![],
+        outputs: vec![
+            TransactionData{
+                to_address: "Alice".to_string(),
+                value: 23
+            },
+            TransactionData{
+                to_address: "Bob".to_string(),
+                value: 67
+            }
+        ]
+    };
+    let transaction_outputs = &transaction.outputs;
+    let output_sum = transaction.get_sum_of_values(transaction_outputs);
+    assert_eq!(output_sum, 90);
+}
+
 // helper functions for generating empty blocks
 fn generate_blocks(amount: usize) -> Vec<Block> {
     let mut blocks = Vec::new();
@@ -69,17 +109,17 @@ fn generate_single_block() -> Block {
     let transactions = vec![
             Transaction{
                 inputs: vec![
-                    Output{
+                    TransactionData{
                         to_address: "Alice".to_string(),
                         value: 50
                     }
                 ],
                 outputs: vec![
-                    Output{
+                    TransactionData{
                         to_address: "Bob".to_string(),
                         value: 25
                     },
-                    Output{
+                    TransactionData{
                         to_address: "Alice".to_string(),
                         value: 25
                     }

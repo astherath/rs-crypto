@@ -7,7 +7,7 @@ mod block;
 pub use block::Block;
 mod transaction;
 pub use transaction::Transaction;
-pub use transaction::Output;
+pub use transaction::TransactionData;
 
 pub struct Blockchain {
     block_list: List,
