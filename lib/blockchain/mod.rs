@@ -4,7 +4,10 @@
 use append_only_list::List;
 use std::fmt;
 mod block;
-pub use block::{Block, BlockChainData};
+pub use block::Block;
+mod transaction;
+pub use transaction::Transaction;
+pub use transaction::TransactionData;
 
 pub struct Blockchain {
     block_list: List,
